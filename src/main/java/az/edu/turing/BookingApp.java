@@ -1,13 +1,12 @@
-package com.example.bookingappspring;
+package az.edu.turing;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BookingAppSpringApplication {
+public class BookingApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(BookingAppSpringApplication.class, args);
+        SpringApplication.run(BookingApp.class, args);
     }
-
 }
