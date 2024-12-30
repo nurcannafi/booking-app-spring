@@ -1,16 +1,21 @@
 package az.edu.turing.model.dto;
 
-import lombok.Getter;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
+@Data
 public class BookingDto {
 
     private Long id;
     private FlightDto flight;
     private LocalDateTime bookingTime;
+
+    @NotNull(message = "Passengers list cannot be null")
+    @NotEmpty(message = "Passengers list cannot be empty")
     private List<PassengerDto> passengers;
 
     public BookingDto(Long id, FlightDto flight, LocalDateTime bookingTime) {

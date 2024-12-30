@@ -1,15 +1,18 @@
 package az.edu.turing.model.dto;
 
-import lombok.Getter;
+import jakarta.validation.constraints.Min;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 public class FlightDto {
 
     private Long id;
     private String destination;
     private LocalDateTime departureTime;
+
+    @Min(value = 0, message = "Available seats cannot be negative")
     private int availableSeats;
 
     public FlightDto(Long id, String destination, LocalDateTime departureTime, int availableSeats) {

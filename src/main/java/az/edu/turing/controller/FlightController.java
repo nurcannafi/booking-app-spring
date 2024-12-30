@@ -31,32 +31,22 @@ public class FlightController {
     @GetMapping
     public ResponseEntity<List<FlightDto>> getAllFlights() {
         List<FlightDto> flights = flightService.getAllFlights();
-        if (flights.isEmpty()) {
-            throw new EntityNotFoundException("No flights found");
-        }
         return ResponseEntity.ok(flights);
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<FlightDto>> searchFlights(@RequestParam String destination,
-                                                         @RequestParam String departureTime) throws BadRequestException {
+                                                         @RequestParam LocalDateTime departureTime) throws BadRequestException {
         try {
-            List<FlightDto> flights = flightService.searchFlights(destination, LocalDateTime.parse(departureTime));
-            if (flights.isEmpty()) {
-                throw new EntityNotFoundException("No flights found for the given date");
-            }
+            List<FlightDto> flights = flightService.searchFlights(destination, departureTime);
             return ResponseEntity.ok(flights);
         } catch (Exception e) {
-            throw new BadRequestException("Invalid departure time format");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-
     }
 
     @PostMapping
-    public ResponseEntity<FlightDto> addFlight(@RequestBody FlightDto flightDto) throws BadRequestException {
-        if (flightDto.getAvailableSeats() < 0) {
-            throw new BadRequestException("Available seats cannot be negative");
-        }
+    public ResponseEntity<FlightDto> addFlight(@RequestBody FlightDto flightDto) {
         FlightDto newFlightDto = flightService.addFlight(flightDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(newFlightDto);
     }
@@ -65,9 +55,10 @@ public class FlightController {
     public ResponseEntity<FlightDto> deleteFlight(@PathVariable Long id) {
         try {
             flightService.deleteFlight(id);
+            return ResponseEntity.noContent().build();
         } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException("Flight not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.noContent().build();
+
     }
 }

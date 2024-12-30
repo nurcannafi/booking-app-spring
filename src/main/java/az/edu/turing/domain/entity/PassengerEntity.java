@@ -8,10 +8,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @Table(name = "passengers")
+@NoArgsConstructor
 public class PassengerEntity {
 
     @Id
@@ -24,9 +26,6 @@ public class PassengerEntity {
     @ManyToOne
     @JoinColumn(name = "booking_id", nullable = false)
     private BookingEntity bookings;
-
-    public PassengerEntity() {
-    }
 
     public PassengerEntity(String firstName, String lastName, int age) {
         this.firstName = firstName;

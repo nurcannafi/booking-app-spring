@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "bookings")
+@NoArgsConstructor
 public class BookingEntity {
 
     @Id
@@ -31,9 +33,6 @@ public class BookingEntity {
 
     @OneToMany(mappedBy = "bookings", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PassengerEntity> passengers;
-
-    public BookingEntity() {
-    }
 
     public BookingEntity(FlightEntity flight, LocalDateTime bookingTime) {
         this.flight = flight;

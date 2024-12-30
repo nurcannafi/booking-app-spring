@@ -25,8 +25,7 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public List<FlightDto> getAllFlights() {
-        List<FlightEntity> flights = flightRepository.findAll();
-        return flights.stream()
+        return flightRepository.findAll().stream()
                 .map(flightMapper::toDto)
                 .collect(Collectors.toList());
     }

@@ -2,6 +2,8 @@ package az.edu.turing.service.impl;
 
 import az.edu.turing.domain.entity.BookingEntity;
 import az.edu.turing.domain.repository.BookingRepository;
+import az.edu.turing.exception.BadRequestException;
+import az.edu.turing.exception.EntityNotFoundException;
 import az.edu.turing.mapper.BookingMapper;
 import az.edu.turing.model.dto.BookingDto;
 import org.springframework.stereotype.Service;
@@ -24,8 +26,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> getAllBookings() {
-        List<BookingEntity> bookings = bookingRepository.findAll();
-        return bookings.stream()
+        return bookingRepository.findAll().stream()
                 .map(bookingMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -45,6 +46,11 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto updateBooking(BookingDto booking) {
+        if (booking.getId() == null) {
+            throw new BadRequestException("Booking must have an ID");
+        }
+        findBookingById(booking.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Booking not found with ID: " + booking.getId()));
         BookingEntity bookingEntity = bookingMapper.toEntity(booking);
         BookingEntity updatedBooking = bookingRepository.save(bookingEntity);
         return bookingMapper.toDto(updatedBooking);
@@ -52,6 +58,11 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void deleteBooking(BookingDto booking) {
+        if (booking.getId() == null) {
+            throw new BadRequestException("Booking must have an ID");
+        }
+        findBookingById(booking.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
         BookingEntity bookingEntity = bookingMapper.toEntity(booking);
         bookingRepository.delete(bookingEntity);
     }

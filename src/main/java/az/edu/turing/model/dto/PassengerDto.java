@@ -1,8 +1,8 @@
 package az.edu.turing.model.dto;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class PassengerDto {
 
     private String firstName;
